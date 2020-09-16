@@ -2,8 +2,11 @@ const express = require("express")
 const dotenv = require("dotenv")
 const mongoose = require("mongoose")
 const { graphqlHTTP } = require("express-graphql")
+const cors = require("cors")
 const schema = require("./schema/schema")
 const app = express()
+
+app.use(cors())
 
 dotenv.config()
 
