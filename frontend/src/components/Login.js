@@ -1,46 +1,57 @@
-import React, { useState } from 'react'
-import { useLazyQuery, useMutation } from "@apollo/client"
+import React, { useState, useEffect } from 'react'
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client"
 import { useForm } from "react-hook-form"
 import { LOGIN } from '../queries/queries'
+import { saveAuthToken } from '../service/tokenService'
 
 const Login = () => {
 
-   const [email, setEmail] = useState("")
-   const [password, setPassword] = useState("")
+   const [formValue, setFormValue] = useState({})
+   const { loading, error, data = {login:{user:{}}} } = useQuery(LOGIN, {
+      variables: {
+         email: formValue.email,
+         password: formValue.password
+      }
+   })
 
-   const [login, { loading, error, data }] = useLazyQuery(LOGIN)
+   useEffect(() => {
+      saveAuthToken(data.login.token)
+   }, [data])
 
-   const handleSubmit = (e) => {
-      e.preventDefault()
-      login({
-         variables: {
-            email,
-            password
-         }
-      })
+
+   const { register, handleSubmit } = useForm()
+   const onSubmit = (value) => {
+      setFormValue(value)
    }
 
-   console.log(data)
+   // console.log(data.login.token)
+   console.log(data.login.user.id)
+
+
+   if (loading) return <p>loading</p>
+
 
    return(
       <>
-         <form onSubmit={handleSubmit} >
+         <form onSubmit={handleSubmit(onSubmit)} >
             <input 
                type="text"
                name="email"
                placeholder="E-mail"
-               onChange={(e) => setEmail(e.target.value)}
+               ref={register}
             />
             <input 
                type="password"
                name="password"
                placeholder="Password"
-               onChange={(e) => setPassword(e.target.value)}
+               autoComplete="on"
+               ref={register}
             />
             <button type="submit">
                Login
             </button>
          </form>
+         {/* <p>{data.login.user.username}</p> */}
       </>
    )
 }

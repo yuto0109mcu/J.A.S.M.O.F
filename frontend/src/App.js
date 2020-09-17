@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import Login from './components/Login';
+import Home from './components/Home';
 
 const client = new ApolloClient({
    uri: 'http://localhost:5000/graphql',
@@ -8,9 +9,12 @@ const client = new ApolloClient({
 })
 
 function App() {
+
+
    return (
       <ApolloProvider client={client}>
-         <Login/>
+         <Login />
+         <Home />
       </ApolloProvider>
    );
 }
