@@ -1,10 +1,12 @@
 
-const saveAuthToken = (token) => {
-   localStorage.setItem("token", token)
+const saveAuthToken = (token, id) => {
+   sessionStorage.setItem("token", token)
+   sessionStorage.setItem("id", id)
 }
 
 const getAuthToken = () => {
-   localStorage.getItem("token")
+   sessionStorage.getItem("token")
+   sessionStorage.getItem("id")
 }
 
 const verified = () => {
